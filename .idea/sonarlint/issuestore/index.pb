@@ -5,3 +5,5 @@
 geckodriver.log,c\b\cbf09af75ab9450a0d305286bcb3745c2b8db0ae
 <
 products.csv,f\6\f625a105df48ae93271f29d880dd69b99388d83f
+S
+#.idea/sonarlint/issuestore/index.pb,9\f\9fe84ebb15faf917b7def6236dba604453cc61e0
