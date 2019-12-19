@@ -6,7 +6,9 @@ import pyppdf.patch_pyppeteer
 session = HTMLSession()
 
 # Use the object above to connect to the webpage
-resp = session.get('https://www.tradera.com/search?q=lundby&itemStatus=Ended')
+search_query = str(input("Search: "))
+resp = session.get('https://www.tradera.com/search?q=' + search_query + '&itemStatus=Ended&spage=1')
+
 
 # Run JavaScript code on webpage
 resp.html.render()
