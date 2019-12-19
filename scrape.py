@@ -11,7 +11,7 @@ resp = session.get('https://www.tradera.com/search?q=lundby&itemStatus=Ended')
 # Run JavaScript code on webpage
 resp.html.render()
 
-# Html parsing
+# Lxml parsing
 page_soup = soup(resp.html.html, 'lxml')
 
 # Grabs each product
@@ -37,3 +37,7 @@ for container in containers:
     print("Title: " + title)
     print("Auction_price " + auction_price)
     print("Bids: " + bids)
+
+    f.write(title + "," + auction_price + "," + bids + "\n")
+
+f.close()
