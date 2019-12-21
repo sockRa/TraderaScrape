@@ -76,19 +76,24 @@ while page <= user_page_choice:
         time.sleep(10 * response_delay)
 
     # Grab each product from one page and put them in a list
-    containers = driver.find_elements_by_class_name("item-card-container")
+    containers = (driver.find_element_by_class_name("row.mb-4")).find_elements_by_class_name("item-card-container")
 
     # Go through each product in containers-list and scrape essential data
     for container in containers:
+
         title = container.find_element_by_class_name("item-card-title.d-flex.flex-row.mb-2").text
+        print(title)
+
         sell_price = strip_out_currency(container.find_elements_by_class_name('text-nowrap.font-weight-bold.item-card'
                                                                               '-details-price'))
 
         bids = strip_out_bid_text(container.find_elements_by_class_name("text-nowrap.mr-2"))
 
+        link = container.find_element_by_class_name("d-block.font-weight-normal.text-truncate").get_attribute("href")
+
         # Scrap any auction with zero bids
         if bids > 0:
-            products.append({"Title": title, "Sell price": sell_price, "Bids": bids})
+            products.append({"Title": title, "Sell price": sell_price, "Bids": bids, "Link": link})
 
     print("Page " + str(page) + " of " + str(user_page_choice) + " done")
     # Once we have gone through the whole page, switch page
@@ -97,11 +102,35 @@ while page <= user_page_choice:
 # Create dataframe for displaying the data
 data_frame = pd.DataFrame(products)
 
-# Print out the results
-average_sales_price = int(round(data_frame['Sell price'].mean()))
-print("Average sales price of " + search_query + " is " + str(average_sales_price) + " SEK")
-
 # Save all products in a CSV file
 data_frame.to_csv(r'Saved_scrapes\%s_scrape.csv' % search_query)
 
 print("Saved " + search_query + r"scrape.csv at: Working_directory\Saved_scrapes")
+
+
+def print_menu():
+    print(30 * "-", "MENU", 30 * "-")
+    print("1. Average sales price")
+    print("2. Three highest auctions")
+    print("3. Three lowest")
+    print("4. Number of entries")
+    print("5. Exit")
+    print(67 * "-")
+
+
+while True:
+    print_menu()
+    choice = int(input("Choice: "))
+
+    if choice == 1:
+        print(str(round(data_frame['Sell price'].mean())) + " SEK")
+    elif choice == 2:
+        print(data_frame.nlargest(3, ['Sell price']))
+    elif choice == 3:
+        print(data_frame.nsmallest(3, ['Sell price']))
+    elif choice == 4:
+        print("Entries: " + str(data_frame.shape[0]))
+    elif choice == 5:
+        break
+    else:
+        print("Invalid input")
