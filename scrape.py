@@ -3,6 +3,7 @@ import time
 from termcolor import colored
 import re
 import pandas as pd
+import os
 
 # Setup browser
 options = webdriver.FirefoxOptions()
@@ -70,10 +71,10 @@ while page <= user_page_choice:
 
         driver.get(driver.current_url)
 
-        # Sleep 10x times longer than it took the server to respond
+        # Sleep 2x times longer than it took the server to respond
         response_delay = round(time.time() - t0)
-        print("Sleep: " + str(response_delay * 10) + " seconds")
-        time.sleep(10 * response_delay)
+        print("Sleep: " + str(response_delay * 2) + " seconds")
+        time.sleep(2 * response_delay)
 
     # Grab each product from one page and put them in a list
     containers = (driver.find_element_by_class_name("row.mb-4")).find_elements_by_class_name("item-card-container")
@@ -101,10 +102,17 @@ while page <= user_page_choice:
 # Create dataframe for displaying the data
 data_frame = pd.DataFrame(products)
 
-# Save all products in a CSV file
-data_frame.to_csv(r'Saved_scrapes\%s_scrape.csv' % search_query)
+outname = search_query + ".csv"
+outdir = './Saved scrapes'
+if not os.path.exists(outdir):
+    os.mkdir(outdir)
 
-print("Saved " + search_query + r"scrape.csv at: Working_directory\Saved_scrapes")
+path = os.path.join(outdir, outname)
+data_frame.to_csv(path)
+# Save all products in a CSV file
+
+
+print("Saved " + outname + " at: " + path)
 
 
 def print_menu():
