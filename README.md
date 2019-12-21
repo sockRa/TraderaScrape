@@ -1,4 +1,5 @@
-# TraderaScrape
+# TraderaScrape Python 3.8
+
 Setup:
   * Download https://github.com/mozilla/geckodriver/releases (win64)
   * Extract the exe somewhere on the computer
