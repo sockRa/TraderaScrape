@@ -7,15 +7,27 @@ import os
 
 # Setup browser
 options = webdriver.FirefoxOptions()
-options.add_argument('--headless')
+# options.add_argument('--headless')
 driver = webdriver.Firefox(options=options)
 
 search_query = str(input("Search: "))
 # Open a session against server
-driver.get('https://www.tradera.com/search?q=' + search_query + '&itemStatus=Ended')
+driver.get('https://www.tradera.com')
 
 # Accept "information about cookies"
 driver.find_element_by_css_selector('button.btn-primary:nth-child(2)').click()
+
+# Search
+search_element = driver.find_element_by_css_selector('.slim-header__search-field')
+search_element.send_keys(search_query)
+search_element.submit()
+
+# Choose closed auctions
+closed_auction_button = driver.find_element_by_css_selector('div.accordion-item:nth-child(9) > div:nth-child(1) > '
+                                                            'div:nth-child(2) > div:nth-child(1) > div:nth-child(1) >'
+                                                            ' div:nth-child(1) > div:nth-child(2) > label:nth-child('
+                                                            '2)')
+closed_auction_button.click()
 
 # Get the last page so we know how many iterations are possible
 try:
@@ -99,6 +111,8 @@ while page <= user_page_choice:
     # Once we have gone through the whole page, switch page
     page += 1
 
+print(12 * "-" + "DONE" + 12 * "-")
+print(24 * "-")
 # Create dataframe for displaying the data
 data_frame = pd.DataFrame(products)
 
