@@ -82,7 +82,6 @@ while page <= user_page_choice:
     for container in containers:
 
         title = container.find_element_by_class_name("item-card-title.d-flex.flex-row.mb-2").text
-        print(title)
 
         sell_price = strip_out_currency(container.find_elements_by_class_name('text-nowrap.font-weight-bold.item-card'
                                                                               '-details-price'))
