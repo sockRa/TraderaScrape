@@ -4,6 +4,10 @@ from termcolor import colored
 import re
 import pandas as pd
 import os
+import sys
+
+pd.set_option('display.expand_frame_repr', False)
+pd.set_option('display.max_colwidth', -1)
 
 # Setup browser
 options = webdriver.FirefoxOptions()
@@ -22,12 +26,14 @@ search_element = driver.find_element_by_css_selector('.slim-header__search-field
 search_element.send_keys(search_query)
 search_element.submit()
 
+time.sleep(2)
 # Choose closed auctions
 closed_auction_button = driver.find_element_by_css_selector('div.accordion-item:nth-child(9) > div:nth-child(1) > '
                                                             'div:nth-child(2) > div:nth-child(1) > div:nth-child(1) >'
                                                             ' div:nth-child(1) > div:nth-child(2) > label:nth-child('
                                                             '2)')
 closed_auction_button.click()
+time.sleep(2)
 
 # Get the last page so we know how many iterations are possible
 try:
@@ -89,7 +95,11 @@ while page <= user_page_choice:
         time.sleep(2 * response_delay)
 
     # Grab each product from one page and put them in a list
-    containers = (driver.find_element_by_class_name("row.mb-4")).find_elements_by_class_name("item-card-container")
+    try:
+        containers = (driver.find_element_by_class_name("row.mb-4")).find_elements_by_class_name("item-card-container")
+    except:
+        print("No auction found matching: " + search_query)
+        sys.exit(1)
 
     # Go through each product in containers-list and scrape essential data
     for container in containers:
@@ -111,7 +121,7 @@ while page <= user_page_choice:
     # Once we have gone through the whole page, switch page
     page += 1
 
-print(12 * "-" + "DONE" + 12 * "-")
+print(12 * "-" + "SCRAPE DONE" + 12 * "-")
 print(24 * "-")
 # Create dataframe for displaying the data
 data_frame = pd.DataFrame(products)
