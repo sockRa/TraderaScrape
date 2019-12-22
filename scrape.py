@@ -144,8 +144,9 @@ def print_menu():
     print("1. Average sales price")
     print("2. Three highest auctions")
     print("3. Three lowest")
-    print("4. Number of entries")
-    print("5. Exit")
+    print("4. All entries")
+    print("5. Number of entries")
+    print("6. Exit")
     print(67 * "-")
 
 
@@ -160,8 +161,10 @@ while True:
     elif choice == 3:
         print(data_frame.nsmallest(3, ['Sell price']))
     elif choice == 4:
-        print("Entries: " + str(data_frame.shape[0]))
+        print(data_frame.sort_values(by='Sell price', kind='quicksort', ascending=True))
     elif choice == 5:
+        print("Entries: " + str(data_frame.shape[0]))
+    elif choice == 6:
         break
     else:
         print("Invalid input")
