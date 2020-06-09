@@ -31,7 +31,7 @@ pd.set_option('display.max_colwidth', None)
 
 # Setup browser
 options = webdriver.FirefoxOptions()
-# options.add_argument('--headless')
+options.add_argument('--headless')
 driver = webdriver.Firefox(options=options)
 
 search_query = str(input("Search: "))
