@@ -7,7 +7,7 @@ import os
 import sys
 
 pd.set_option('display.expand_frame_repr', False)
-pd.set_option('display.max_colwidth', -1)
+pd.set_option('display.max_colwidth', None)
 
 # Setup browser
 options = webdriver.FirefoxOptions()
@@ -25,15 +25,32 @@ driver.find_element_by_css_selector('button.btn-primary:nth-child(2)').click()
 search_element = driver.find_element_by_css_selector('.slim-header__search-field')
 search_element.send_keys(search_query)
 search_element.submit()
-
 time.sleep(2)
+
 # Choose closed auctions
-closed_auction_button = driver.find_element_by_css_selector('div.accordion-item:nth-child(9) > div:nth-child(1) > '
-                                                            'div:nth-child(2) > div:nth-child(1) > div:nth-child(1) >'
-                                                            ' div:nth-child(1) > div:nth-child(2) > label:nth-child('
-                                                            '2)')
+# Open "status menu" in order to reveal the "closed auction" button
+closed_auction_button_menu = driver.find_element_by_css_selector('div.accordion-item:nth-child(3) > div:nth-child(1) > span:nth-child(2)')
+closed_auction_button_menu.click()
+time.sleep(2)
+closed_auction_button = driver.find_element_by_css_selector('div.accordion-item:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > span:nth-child(2) > label:nth-child(2)')
 closed_auction_button.click()
 time.sleep(2)
+
+# Ask user if they want to sort for new/used products
+used = str(input("Product is used? (Y/N) (Leave empty for both): "))
+if used != '':
+    # Open "condition" menu
+    condition_menu = driver.find_element_by_css_selector('div.accordion-item:nth-child(8) > div:nth-child(1) > span:nth-child(2)')
+    condition_menu.click()
+    time.sleep(2)
+    if used == 'Y':
+        condition_menu = driver.find_element_by_css_selector('div.accordion-item:nth-child(8) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > span:nth-child(3) > label:nth-child(2)')
+        condition_menu.click()
+        time.sleep(2)
+    else:
+        condition_menu = driver.find_element_by_css_selector('div.accordion-item:nth-child(6) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > span:nth-child(2) > label:nth-child(2)')
+        condition_menu.click()
+        time.sleep(2)
 
 # Get the last page so we know how many iterations are possible
 try:
@@ -137,6 +154,7 @@ data_frame.to_csv(path)
 
 
 print("Saved " + outname + " at: " + path)
+driver.close()
 
 
 def print_menu():
