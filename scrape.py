@@ -6,6 +6,26 @@ import pandas as pd
 import os
 import sys
 
+def sort_products_on_condition():
+    used = str(input("Product is used? (y/n) (Leave empty for both): "))
+    if used != '':
+    # Browse menu and open the correct menu option, which in this case is "Skick"
+        menu_items = driver.find_elements_by_class_name('text-styled.flex-grow-1.flex-shrink-1')
+        for item in menu_items:
+            if item.text == 'SKICK':
+                item.click()
+                break
+
+        # Select "Used" if the user want to sort for used products
+        if used == 'y':
+            condition_menu = driver.find_element_by_css_selector('div.accordion-item:nth-child(8) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > span:nth-child(3)')
+            condition_menu.click()
+            time.sleep(2)
+        else:
+            condition_menu = driver.find_element_by_css_selector('div.accordion-item:nth-child(8) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > span:nth-child(2)')
+            condition_menu.click()
+            time.sleep(2)
+
 pd.set_option('display.expand_frame_repr', False)
 pd.set_option('display.max_colwidth', None)
 
@@ -25,32 +45,21 @@ driver.find_element_by_css_selector('button.btn-primary:nth-child(2)').click()
 search_element = driver.find_element_by_css_selector('.slim-header__search-field')
 search_element.send_keys(search_query)
 search_element.submit()
-time.sleep(2)
+time.sleep(5)
 
 # Choose closed auctions
 # Open "status menu" in order to reveal the "closed auction" button
 closed_auction_button_menu = driver.find_element_by_css_selector('div.accordion-item:nth-child(3) > div:nth-child(1) > span:nth-child(2)')
 closed_auction_button_menu.click()
 time.sleep(2)
+
+# Click "closed auction" button
 closed_auction_button = driver.find_element_by_css_selector('div.accordion-item:nth-child(3) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > span:nth-child(2) > label:nth-child(2)')
 closed_auction_button.click()
 time.sleep(2)
 
 # Ask user if they want to sort for new/used products
-used = str(input("Product is used? (Y/N) (Leave empty for both): "))
-if used != '':
-    # Open "condition" menu
-    condition_menu = driver.find_element_by_css_selector('div.accordion-item:nth-child(8) > div:nth-child(1) > span:nth-child(2)')
-    condition_menu.click()
-    time.sleep(2)
-    if used == 'Y':
-        condition_menu = driver.find_element_by_css_selector('div.accordion-item:nth-child(8) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > span:nth-child(3) > label:nth-child(2)')
-        condition_menu.click()
-        time.sleep(2)
-    else:
-        condition_menu = driver.find_element_by_css_selector('div.accordion-item:nth-child(6) > div:nth-child(2) > div:nth-child(1) > div:nth-child(1) > div:nth-child(1) > span:nth-child(2) > label:nth-child(2)')
-        condition_menu.click()
-        time.sleep(2)
+sort_products_on_condition()
 
 # Get the last page so we know how many iterations are possible
 try:
